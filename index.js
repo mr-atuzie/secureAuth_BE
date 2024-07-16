@@ -1,4 +1,5 @@
 const dotenv = require("dotenv").config();
+const colors = require("colors");
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
@@ -34,5 +35,5 @@ const PORT = process.env.PORT || 7000;
 
 app.listen(PORT, () => {
   connectDB();
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`.yellow.underline.bold);
 });

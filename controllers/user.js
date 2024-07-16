@@ -283,7 +283,7 @@ const forgetPassword = asyncHandler(async (req, res) => {
   //   expiresAt: Date.now() + 30 * (60 * 1000),
   // }).save();
 
-  const reset_link = `http://localhost:3000/reset-password/${resetToken}`;
+  const reset_link = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
   const message = ` 
   <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
