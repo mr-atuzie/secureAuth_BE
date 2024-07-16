@@ -143,8 +143,6 @@ const loginUser = asyncHandler(async (req, res) => {
   //Validate password
   const checkPassword = await bcrypt.compare(password, user.password);
 
-  console.log({ checkPassword, password });
-
   if (user && checkPassword) {
     // Generate token
     const jwtToken = generateToken(user._id);
@@ -349,20 +347,23 @@ const resetPassword = asyncHandler(async (req, res) => {
     .update(resetToken)
     .digest("hex");
 
-  const user = await Token.findOne({
+  const tokenDoc = await Token.findOne({
     resetToken: hashToken,
     expiresAt: { $gt: Date.now() },
   });
 
-  if (!user) {
+  if (!tokenDoc) {
     res.status(400);
     throw new Error("Invalid or expired token");
   }
 
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
   const updatedUserDoc = await User.findByIdAndUpdate(
-    { _id: user._id },
+    tokenDoc.userId,
     {
-      password: password,
+      password: hashedPassword,
     },
     { new: true } // Return the updated document
   );
