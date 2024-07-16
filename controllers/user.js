@@ -143,7 +143,7 @@ const loginUser = asyncHandler(async (req, res) => {
   //Validate password
   const checkPassword = await bcrypt.compare(password, user.password);
 
-  console.log({checkPassword , password});
+  console.log({ checkPassword, password });
 
   if (user && checkPassword) {
     // Generate token
@@ -337,9 +337,9 @@ const forgetPassword = asyncHandler(async (req, res) => {
 
 const resetPassword = asyncHandler(async (req, res) => {
   const { resetToken } = req.params;
-  const { password: newPassword } = req.body;
+  const { password } = req.body;
 
-  if (newPassword.length < 6) {
+  if (password.length < 6) {
     res.status(400);
     throw new Error("Password must be up to 6 characters");
   }
@@ -362,7 +362,7 @@ const resetPassword = asyncHandler(async (req, res) => {
   const updatedUserDoc = await User.findByIdAndUpdate(
     { _id: user._id },
     {
-      password: newPassword,
+      password: password,
     },
     { new: true } // Return the updated document
   );
