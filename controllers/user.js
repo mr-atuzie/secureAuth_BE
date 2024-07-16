@@ -143,6 +143,8 @@ const loginUser = asyncHandler(async (req, res) => {
   //Validate password
   const checkPassword = await bcrypt.compare(password, user.password);
 
+  console.log({checkPassword , password});
+
   if (user && checkPassword) {
     // Generate token
     const jwtToken = generateToken(user._id);
