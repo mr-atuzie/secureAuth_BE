@@ -87,7 +87,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const message = `
     <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
        <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #dddddd; border-radius: 5px; overflow: hidden;">
-            <div style="background-color: #007bff; color: #ffffff; text-align: center; padding: 10px 0;">
+            <div style="background-color: #FF5D2E; color: #ffffff; text-align: center; padding: 10px 0;">
                 <h1 style="margin: 0; font-size: 24px;">Verification Code</h1>
             </div>
             <div style="padding: 20px;">
@@ -298,7 +298,7 @@ const forgetPassword = asyncHandler(async (req, res) => {
                       <p style="margin: 0 0 20px;">Hello, ${user.name}</p>
                       <p style="margin: 0 0 20px;">We received a request to reset your password. Click the button below to reset it:</p>
                       <p style="text-align: center;">
-                          <a href=${reset_link} target="_blank" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #007BFF; border-radius: 5px; text-decoration: none;">Reset Password</a>
+                          <a href=${reset_link} target="_blank" style="display: inline-block; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #FF5D2E; border-radius: 5px; text-decoration: none;">Reset Password</a>
                       </p>
                       <p style="margin: 20px 0 0;">If you didn't request a password reset, please ignore this email or contact support if you have questions.</p>
                       <p style="margin: 0;">Thank you,</p>
@@ -383,6 +383,19 @@ const getUser = asyncHandler(async (req, res) => {
   }
 });
 
+//logout
+const logout = asyncHandler(async (req, res) => {
+  res.cookie("token", "", {
+    path: "/",
+    httpOnly: true,
+    expires: new Date(0),
+    //   sameSite: "none",
+    //   secure: true,
+  });
+
+  res.status(200).json("Successfully Logged Out");
+});
+
 // BONDLOTTO API
 
 //Create user bond lotto account
@@ -434,4 +447,5 @@ module.exports = {
   getUser,
   forgetPassword,
   resetPassword,
+  logout,
 };
