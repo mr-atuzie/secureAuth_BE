@@ -180,7 +180,7 @@ const loginUser = asyncHandler(async (req, res) => {
                 </div>
                 <div style="padding: 20px;">
                     <p>Hi <strong>${user.name}</strong>,</p>
-                    <p>TPlease use the following verification code to complete your sign-in process:</p>
+                    <p>Please use the following verification code to complete your sign-in process:</p>
                     <p style="font-size: 20px; font-weight: bold; text-align: center; margin: 20px 0;">${verificationCode}</p>
                     <p>If you did not request this code, please ignore this email.</p>
                     <p>Best regards,<br>Secure Auth</p>
