@@ -86,22 +86,22 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const message = `
          <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
-            <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #dddddd; border-radius: 5px; overflow: hidden;">
-                <div style="background-color: #FF5D2E; padding: 20px; text-align: center; color: #ffffff;">
-                    <h1 style="margin: 0;">Verification Code</h1>
-                </div>
-                <div style="padding: 20px;">
-                    <p>Hi <strong>${user.name}</strong>,</p>
-                    <p>Thank you for registering with us. Please use the following verification code to complete your sign-up process:</p>
-                    <p style="font-size: 20px; font-weight: bold; text-align: center; margin: 20px 0;">${verificationCode}</p>
-                    <p>If you did not request this code, please ignore this email.</p>
-                    <p>Best regards,<br>Secure Auth</p>
-                </div>
-                <div style="background-color: #f4f4f4; padding: 10px; text-align: center; color: #777777;">
-                    <p style="margin: 0;">&copy; 2024 Secure Auth. All rights reserved.</p>
-                </div>
-            </div>
-        </body>`;
+    <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #dddddd; border-radius: 5px; overflow: hidden;">
+        <div style="background-color: #FF5D2E; padding: 20px; text-align: center; color: #ffffff;">
+            <h1 style="margin: 0;">Welcome!</h1>
+        </div>
+        <div style="padding: 20px;">
+            <p style="text-transform: capitalize;">Hi <strong>${user.name}</strong>,</p>
+            <p> Please use the following verification code to complete your sign-up process:</p>
+            <p style="font-size: 20px; font-weight: bold; text-align: center; margin: 20px 0;">${verificationCode}</p>
+            <p>If you did not request this code, please ignore this email.</p>
+            <p>Best regards,<br>Secure Auth</p>
+        </div>
+        <div style="background-color: #f4f4f4; padding: 10px; text-align: center; color: #777777;">
+            <p style="margin: 0;">&copy; 2024 Secure Auth. All rights reserved.</p>
+        </div>
+    </div>
+</body>`;
 
     const subject = "Verify your Email";
     const send_to = email;
@@ -174,6 +174,83 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const message = `
          <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+    <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #dddddd; border-radius: 5px; overflow: hidden;">
+        <div style="background-color: #FF5D2E; padding: 20px; text-align: center; color: #ffffff;">
+            <h1 style="margin: 0;">Welcome!</h1>
+        </div>
+        <div style="padding: 20px;">
+            <p style="text-transform: capitalize;">Hi <strong>${user.name}</strong>,</p>
+            <p> Please use the following verification code to complete your sign-up process:</p>
+            <p style="font-size: 20px; font-weight: bold; text-align: center; margin: 20px 0;">${verificationCode}</p>
+            <p>If you did not request this code, please ignore this email.</p>
+            <p>Best regards,<br>Secure Auth</p>
+        </div>
+        <div style="background-color: #f4f4f4; padding: 10px; text-align: center; color: #777777;">
+            <p style="margin: 0;">&copy; 2024 Secure Auth. All rights reserved.</p>
+        </div>
+    </div>
+</body>`;
+    const subject = "Verify your Email";
+    const send_to = email;
+    const send_from = process.env.EMAIL_USER;
+
+    try {
+      await sendEmail(subject, message, send_to, send_from);
+      res
+        .status(201)
+        .json({ newToken, msg: "Email has been sent", verificationCode });
+    } catch (error) {
+      res.status(500);
+      throw new Error("Email not sent , Please try Again.");
+    }
+  } else {
+    res.status(400);
+    throw new Error("Invalid email or password.");
+  }
+});
+
+// resend
+const resend = asyncHandler(async (req, res) => {
+  const user = req.user;
+
+  //Validate user
+  if (!user) {
+    res.status(400);
+    throw new Error("User does not exist, Please sign up.");
+  }
+
+  if (user) {
+    // Generate token
+    const jwtToken = generateToken(user._id);
+
+    res.cookie("token", jwtToken, {
+      path: "/",
+      httpOnly: true,
+      expires: new Date(Date.now() + 1000 * 86400),
+      sameSite: "none",
+      secure: true,
+    });
+
+    const verificationCode = generateString(7);
+    const salt = await bcrypt.genSalt(10);
+    const hashedCode = await bcrypt.hash(verificationCode, salt);
+
+    //find and remove old token
+    let oldToken = await Token.findOne({ userId: user._id });
+
+    if (oldToken) {
+      await oldToken.deleteOne();
+    }
+    // create new token
+    const newToken = await new Token({
+      userId: user._id,
+      token: hashedCode,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + 15 * (60 * 1000),
+    }).save();
+
+    const message = `
+         <body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
             <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #dddddd; border-radius: 5px; overflow: hidden;">
                 <div style="background-color: #FF5D2E; padding: 20px; text-align: center; color: #ffffff;">
                     <h1 style="margin: 0;">Verification Code</h1>
@@ -191,7 +268,7 @@ const loginUser = asyncHandler(async (req, res) => {
             </div>
         </body>`;
     const subject = "Verify your Email";
-    const send_to = email;
+    const send_to = user.email;
     const send_from = process.env.EMAIL_USER;
 
     try {
@@ -445,4 +522,5 @@ module.exports = {
   forgetPassword,
   resetPassword,
   logout,
+  resend,
 };
