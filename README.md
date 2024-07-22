@@ -4,6 +4,7 @@
 - Technologies Used.
 - Installation
 - Environment Variables
+- Usage
 - Contributing
 - Author
 
@@ -61,6 +62,19 @@ FRONTEND_URL=your_frontend_url
 ```bash
 $ npm run start
 $ npm run dev
+```
+## Usage
+### API Endpoints:
+Here are some of the key API endpoints available,to test your API endpoints, you can use Postman. 
+
+**User Endpoints:**
+```bash
+POST /api/users/register: Register a new user.
+POST /api/users/login: Log in a user and obtain a JWT token.
+POST /api/users/verify-email: verify OTP sent to user email.
+POST /api/users/forgot-password: verify OTP sent to user email.
+POST /api/users/rest-password: verify OTP sent to user email.
+GET /api/users/: Retrieve user profile data (authentication required).
 ```
 ## Related Repositories
 Frontend Repository: [https://github.com/mr-atuzie/secureAuth_FE](https://github.com/mr-atuzie/secureAuth_FE)
