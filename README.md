@@ -12,10 +12,10 @@
 is a authentication platform designed to implement Two-Factor Authentication (2FA) using email.It provides a authentication mechanism that enhances security by requiring users to verify their identity through a code sent to their email and also Password Management system for Forget and Reset Password.
 
 ## Features
-- User registration and login with JWT-based authentication and HTTPS cookies
-- Password hashing and salting
-- 2FA using a time-based one-time password (OTP) sent to user email
-- Password management system for Forgot and reset password
+- **User Authentication:** Secure user login and registration with JWT-based authentication Password hashing and salting.
+- **2FA with email:** Using a time-based one-time password (OTP) sent to user email.
+- **Password management system:** Send one-time token  for Forgot and reset password.
+- **Responsive Design:** Fully responsive design ensuring a smooth experience on both desktop and mobile devices.
 
 ## Technologies Used
 ### Backend
