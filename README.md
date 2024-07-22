@@ -69,12 +69,23 @@ Here are some of the key API endpoints available,to test your API endpoints, you
 
 **User Endpoints:**
 ```bash
-POST /api/users/register: Register a new user.
-POST /api/users/login: Log in a user and obtain a JWT token.
-POST /api/users/verify-email: verify OTP sent to user email.
-POST /api/users/forgot-password: verify OTP sent to user email.
-POST /api/users/rest-password: verify OTP sent to user email.
-GET /api/users/: Retrieve user profile data (authentication required).
+# Register a new user
+POST /api/users/register
+
+#Log in a user and obtain a JWT token
+POST /api/users/login
+
+# Verify OTP sent to user email
+POST /api/users/verify-email
+
+# Send an reset password token to user email 
+POST /api/users/forgot-password
+
+# Verify reset password token and rest user password
+POST /api/users/rest-password
+
+# Retrieve user profile data (authentication required).
+GET /api/users/
 ```
 ## Related Repositories
 Frontend Repository: [https://github.com/mr-atuzie/secureAuth_FE](https://github.com/mr-atuzie/secureAuth_FE)
