@@ -1,7 +1,7 @@
 ## Table of Contents
 -Introduction
 -Features
--Technologies Used
+-Technologies Used.
 -Installation
 -Environment Variables
 -Contributing
